@@ -86,7 +86,17 @@ body {
 .submit-button {
 	width: 200px;
 	padding: 10px;
-	border-radius: 10px;
+	color: white;
+	background-color: transparent;
+	cursor: pointer;
+	border: thin solid white;
+	text-align: center;
+	transition: all 0.25s ease-in-out;
+}
+
+.submit-button:hover {
+	color: black;
+	background-color: white;
 }
 
 .photo-container {

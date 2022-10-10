@@ -15,10 +15,13 @@ export const BottomBar = ({
 
   return (
     <div className='bar-bottom'>
-      <button
+      <div
         className='submit-button'
-        disabled={marker == null}
         onClick={() => {
+          if (marker == null) {
+            alert('You gotta guess first dude');
+            return;
+          }
           if (status === 'submit') {
             // Dispatch check event on click
             dispatchEvent(new CustomEvent('check', { detail: { loc: location } }));
@@ -39,7 +42,7 @@ export const BottomBar = ({
         {
           status === 'submit' ? 'CHECK' : 'NEXT'
         }
-      </button>
+      </div>
     </div>
   );
 }
