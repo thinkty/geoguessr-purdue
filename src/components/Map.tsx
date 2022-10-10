@@ -10,13 +10,21 @@ import Point from 'ol/geom/Point';
 import Style from 'ol/style/Style';
 import Icon from 'ol/style/Icon';
 
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">`
+const svgGuess = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">`
   + `<defs></defs>`
   + `<g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >`
   + `<path d="M 45 90 c -1.652 0 -3.135 -1.016 -3.731 -2.558 c -1.345 -3.478 -2.727 -7.037 -4.108 -10.597 c -7.378 -19.008 -14.348 -36.961 -16.501 -44.348 c -0.676 -2.306 -1.02 -4.709 -1.02 -7.137 C 19.64 11.376 31.016 0 45 0 c 13.983 0 25.36 11.376 25.36 25.36 c 0 2.425 -0.344 4.828 -1.021 7.141 c -2.15 7.377 -9.112 25.312 -16.483 44.299 c -1.388 3.574 -2.775 7.149 -4.126 10.642 C 48.135 88.984 46.652 90 45 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(229,0,39); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />`
   + `<circle cx="45" cy="24.08" r="12.5" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/>`
   + `</g>`
   + `</svg>`;
+
+const svgAns = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">`
++ `<defs></defs>`
++ `<g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >`
++ `<path d="M 45 90 c -1.652 0 -3.135 -1.016 -3.731 -2.558 c -1.345 -3.478 -2.727 -7.037 -4.108 -10.597 c -7.378 -19.008 -14.348 -36.961 -16.501 -44.348 c -0.676 -2.306 -1.02 -4.709 -1.02 -7.137 C 19.64 11.376 31.016 0 45 0 c 13.983 0 25.36 11.376 25.36 25.36 c 0 2.425 -0.344 4.828 -1.021 7.141 c -2.15 7.377 -9.112 25.312 -16.483 44.299 c -1.388 3.574 -2.775 7.149 -4.126 10.642 C 48.135 88.984 46.652 90 45 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(218,170,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />`
++ `<circle cx="45" cy="24.08" r="12.5" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/>`
++ `</g>`
++ `</svg>`;
 
 export const PurdueMap = ({
   setMarker,
@@ -34,7 +42,7 @@ export const PurdueMap = ({
     });
     const markerStyle = new Style({
       image: new Icon({
-        src: 'data:image/svg+xml;utf8,' + svg,
+        src: 'data:image/svg+xml;utf8,' + svgGuess,
         scale: 0.2,
         anchor: [0.5, 1],
         anchorXUnits: 'fraction',
@@ -48,6 +56,26 @@ export const PurdueMap = ({
       })
     });
 
+    // Adding new marker to show answer
+    const answerFeature = new Feature({
+      geometry: new Point([0, 0]),
+    });
+    const answerStyle = new Style({
+      image: new Icon({
+        src: 'data:image/svg+xml;utf8,' + svgAns,
+        scale: 0.2,
+        anchor: [0.5, 1],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'fraction',
+      }),
+    });
+    answerFeature.setStyle(answerStyle);
+    let answer = new VectorLayer({
+      source: new VectorSource({
+        features: [ answerFeature ],
+      })
+    });
+
 		const map = new Map({
 			target: 'map',
 			layers: [
@@ -55,6 +83,7 @@ export const PurdueMap = ({
 					source: new OSM()
 				}),
         marker,
+        answer,
 			],
 			view: new View({
 				center: [-9675229.852431227, 4928229.067349787],
@@ -79,6 +108,33 @@ export const PurdueMap = ({
       markerFeature.getGeometry()?.setCoordinates(evt.coordinate);
       setMarker(evt.coordinate);
     });
+    
+    // Add event handler to be triggered when submit button is pushed
+    const checkHandler = (e: CustomEvent) => {
+
+      // Show answer location
+      answerFeature.getGeometry()?.setCoordinates(e.detail.loc);
+
+      // Pan to the answer location
+      map.getView().animate({
+        center: e.detail.loc,
+        duration: 1000, // 1 second
+      });
+    }
+    addEventListener('check', checkHandler as EventListener);
+
+    // Add event handler for reseting the map markers
+    const resetHandler = () => {
+      answerFeature.getGeometry()?.setCoordinates([0,0]);
+      markerFeature.getGeometry()?.setCoordinates([0,0]);
+    }
+    addEventListener('resetmap', resetHandler);
+
+    return () => {
+      // Clean up the event listener
+      removeEventListener('check', checkHandler as EventListener);
+      removeEventListener('resetmap', resetHandler);
+    };
 	}, []);
 
   return (

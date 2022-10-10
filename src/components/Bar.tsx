@@ -4,7 +4,7 @@ export const Bar = () => {
   return (
     <div className='bar'>
       <div className='title'>
-        GeoGuessr Purdue
+        Where-You-At Purdue
       </div>
       <div className='link'>
         <a
