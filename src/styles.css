@@ -68,30 +68,53 @@ body {
 	transform: rotate(15deg);
 }
 
+.bar-bottom {
+	position: fixed;
+	z-index: var(--bar-z-index);
+	bottom: 0;
+	width: 100%;
+	height: var(--bar-height);
+	background-color: black;
+	box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+.submit-button {
+	width: 200px;
+	padding: 10px;
+	border-radius: 10px;
+}
+
 .photo-container {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: calc(100vh - var(--bar-height));
-	background-color: #C4BFC0;
+	height: calc(100vh - var(--bar-height) - var(--bar-height));
+	background-color: #555960;
 }
 
 .photo-container img {
 	max-width: 90%;
 	max-height: 90%;
 	border-radius: 20px;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .map-container {
 	flex: 1;
 	background-color: #e2e2e2;
+	height: calc(100vh - var(--bar-height) - var(--bar-height));
 }
 
 #map {
 	width: 100%;
-	height: calc(100vh - var(--bar-height));
+	height: 100%;
 }
 
 #map .location path {
