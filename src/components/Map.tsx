@@ -31,7 +31,7 @@ export const PurdueMap = ({
 } : {
   setMarker: (marker: Coordinate) => void,
 }) => {
-  
+
 	// Load the map
 	useEffect(() => {
 
@@ -105,6 +105,10 @@ export const PurdueMap = ({
 
     // Update marker position on click and call callback function
     map.on('click', (evt) => {
+      // Print coordinates only in development mode
+      if (process.env.NODE_ENV == 'development') {
+        console.log(evt.coordinate);
+      }
       markerFeature.getGeometry()?.setCoordinates(evt.coordinate);
       setMarker(evt.coordinate);
     });
@@ -113,6 +117,7 @@ export const PurdueMap = ({
     const checkHandler = (e: CustomEvent) => {
 
       // Show answer location
+      // TODO: if the location(answer) is near the marker, just say correct
       answerFeature.getGeometry()?.setCoordinates(e.detail.loc);
 
       // Pan to the answer location
